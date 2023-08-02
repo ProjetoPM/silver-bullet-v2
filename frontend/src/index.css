@@ -1,11 +1,33 @@
 @tailwind base;
 @tailwind components;
 
+@layer base {
+  .ql-container {
+    font-size: 1rem !important;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .ql-toolbar.ql-snow {
+    @apply bg-gray-100 dark:bg-gray-400;
+    border-radius: 8px 8px 0px 0px;
+  }
+
+  .ql-fill {
+    @apply text-black dark:text-gray-100;
+  }
+}
+
 .table-responsive {
   display: block;
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.bordering {
+  border-top-color: #e5e7eb !important;
+  border-right-color: #e5e7eb !important;
+  border-bottom-color: #e5e7eb !important;
 }
 
 .spinner,
@@ -271,8 +293,7 @@
 .rc-pagination-jump-prev-custom-icon .custom-icon-jump-prev,
 .rc-pagination-jump-next-custom-icon .custom-icon-jump-prev,
 .rc-pagination-jump-prev-custom-icon .custom-icon-jump-next,
-.rc-pagination-jump-next-custom-icon
-  .custom-icon-jump-next {
+.rc-pagination-jump-next-custom-icon .custom-icon-jump-next {
   opacity: 0;
   transition: all 0.2s;
 }
@@ -280,14 +301,10 @@
 .rc-pagination-jump-next-custom-icon:hover:after {
   opacity: 0;
 }
-.rc-pagination-jump-prev-custom-icon:hover
-  .custom-icon-jump-prev,
-.rc-pagination-jump-next-custom-icon:hover
-  .custom-icon-jump-prev,
-.rc-pagination-jump-prev-custom-icon:hover
-  .custom-icon-jump-next,
-.rc-pagination-jump-next-custom-icon:hover
-  .custom-icon-jump-next {
+.rc-pagination-jump-prev-custom-icon:hover .custom-icon-jump-prev,
+.rc-pagination-jump-next-custom-icon:hover .custom-icon-jump-prev,
+.rc-pagination-jump-prev-custom-icon:hover .custom-icon-jump-next,
+.rc-pagination-jump-next-custom-icon:hover .custom-icon-jump-next {
   opacity: 1;
 }
 .rc-pagination-prev,
@@ -432,9 +449,7 @@
   margin-right: 8px;
   list-style: none;
 }
-.rc-pagination-simple
-  .rc-pagination-simple-pager
-  .rc-pagination-slash {
+.rc-pagination-simple .rc-pagination-simple-pager .rc-pagination-slash {
   margin: 0 10px;
 }
 .rc-pagination-simple .rc-pagination-simple-pager input {
@@ -447,9 +462,7 @@
   padding: 5px 8px;
   min-height: 20px;
 }
-.rc-pagination-simple
-  .rc-pagination-simple-pager
-  input:hover {
+.rc-pagination-simple .rc-pagination-simple-pager input:hover {
   border-color: rgb(229, 231, 235);
 }
 .rc-pagination-simple .rc-pagination-simple-pager button {
@@ -477,15 +490,9 @@
   background-color: transparent;
   border-color: rgb(229, 231, 235);
 }
-.rc-pagination-simple
-  .rc-pagination-simple-pager
-  button:hover,
-.rc-pagination-simple
-  .rc-pagination-simple-pager
-  button:active,
-.rc-pagination-simple
-  .rc-pagination-simple-pager
-  button:focus {
+.rc-pagination-simple .rc-pagination-simple-pager button:hover,
+.rc-pagination-simple .rc-pagination-simple-pager button:active,
+.rc-pagination-simple .rc-pagination-simple-pager button:focus {
   background-color: transparent;
   border-color: rgb(229, 231, 235);
 }

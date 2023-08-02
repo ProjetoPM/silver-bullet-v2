@@ -1,9 +1,9 @@
-import React from 'react';
-import { i18n } from 'src/i18n';
-import ProjectCharterListFilter from 'src/view/projectCharter/list/ProjectCharterListFilter';
-import ProjectCharterListTable from 'src/view/projectCharter/list/ProjectCharterListTable';
-import ProjectCharterListToolbar from 'src/view/projectCharter/list/ProjectCharterListToolbar';
-import Breadcrumb from 'src/view/shared/Breadcrumb';
+import React from 'react'
+import { i18n } from 'src/i18n'
+import ProjectCharterListFilter from 'src/view/projectCharter/list/ProjectCharterListFilter'
+import ProjectCharterListTable from 'src/view/projectCharter/list/ProjectCharterListTable'
+import ProjectCharterListToolbar from 'src/view/projectCharter/list/ProjectCharterListToolbar'
+import Breadcrumb from 'src/view/shared/Breadcrumb'
 
 function ProjectCharterListPage(props) {
   return (
@@ -24,7 +24,7 @@ function ProjectCharterListPage(props) {
         <ProjectCharterListTable />
       </div>
     </>
-  );
+  )
 }
 
-export default ProjectCharterListPage;
+export default ProjectCharterListPage

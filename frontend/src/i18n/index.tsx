@@ -25,13 +25,6 @@ const languages: {
     dateFns: null,
     dictionary: null,
   },
-  es: {
-    id: 'es',
-    label: 'Español',
-    flag: '/images/flags/Spain.png',
-    dateFns: null,
-    dictionary: null,
-  },
   'pt-BR': {
     id: 'pt-BR',
     label: 'Português',

@@ -1,97 +1,78 @@
 import {
   faEdit,
   faTrashAlt,
-} from '@fortawesome/free-regular-svg-icons';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { i18n } from 'src/i18n';
-import resourceBreakdownStructureSelectors from 'src/modules/resourceBreakdownStructure/resourceBreakdownStructureSelectors';
-import destroyActions from 'src/modules/resourceBreakdownStructure/destroy/resourceBreakdownStructureDestroyActions';
-import destroySelectors from 'src/modules/resourceBreakdownStructure/destroy/resourceBreakdownStructureDestroySelectors';
-import actions from 'src/modules/resourceBreakdownStructure/list/resourceBreakdownStructureListActions';
-import selectors from 'src/modules/resourceBreakdownStructure/list/resourceBreakdownStructureListSelectors';
-import TableColumnHeader from 'src/view/shared/table/TableColumnHeader';
-import ConfirmModal from 'src/view/shared/modals/ConfirmModal';
-import Spinner from 'src/view/shared/Spinner';
-import Pagination from 'src/view/shared/table/Pagination';
-import FilesListView from 'src/view/shared/table/FileListView';
+} from '@fortawesome/free-regular-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { i18n } from 'src/i18n'
+import destroyActions from 'src/modules/resourceBreakdownStructure/destroy/resourceBreakdownStructureDestroyActions'
+import destroySelectors from 'src/modules/resourceBreakdownStructure/destroy/resourceBreakdownStructureDestroySelectors'
+import actions from 'src/modules/resourceBreakdownStructure/list/resourceBreakdownStructureListActions'
+import selectors from 'src/modules/resourceBreakdownStructure/list/resourceBreakdownStructureListSelectors'
+import resourceBreakdownStructureSelectors from 'src/modules/resourceBreakdownStructure/resourceBreakdownStructureSelectors'
+import Spinner from 'src/view/shared/Spinner'
+import ConfirmModal from 'src/view/shared/modals/ConfirmModal'
+import FilesListView from 'src/view/shared/table/FileListView'
+import Pagination from 'src/view/shared/table/Pagination'
+import TableColumnHeader from 'src/view/shared/table/TableColumnHeader'
 
 function ResourceBreakdownStructureListTable(props) {
-  const [
-    recordIdToDestroy,
-    setRecordIdToDestroy,
-  ] = useState(null);
-  const dispatch = useDispatch();
+  const [recordIdToDestroy, setRecordIdToDestroy] =
+    useState(null)
+  const dispatch = useDispatch()
 
-  const findLoading = useSelector(selectors.selectLoading);
+  const findLoading = useSelector(selectors.selectLoading)
 
   const destroyLoading = useSelector(
     destroySelectors.selectLoading,
-  );
+  )
 
-  const loading = findLoading || destroyLoading;
+  const loading = findLoading || destroyLoading
 
-  const rows = useSelector(selectors.selectRows);
-  const pagination = useSelector(
-    selectors.selectPagination,
-  );
+  const rows = useSelector(selectors.selectRows)
+  const pagination = useSelector(selectors.selectPagination)
   const selectedKeys = useSelector(
     selectors.selectSelectedKeys,
-  );
-  const hasRows = useSelector(selectors.selectHasRows);
-  const sorter = useSelector(selectors.selectSorter);
+  )
+  const hasRows = useSelector(selectors.selectHasRows)
   const isAllSelected = useSelector(
     selectors.selectIsAllSelected,
-  );
+  )
   const hasPermissionToEdit = useSelector(
     resourceBreakdownStructureSelectors.selectPermissionToEdit,
-  );
+  )
   const hasPermissionToDestroy = useSelector(
     resourceBreakdownStructureSelectors.selectPermissionToDestroy,
-  );
+  )
 
   const doOpenDestroyConfirmModal = (id) => {
-    setRecordIdToDestroy(id);
-  };
+    setRecordIdToDestroy(id)
+  }
 
   const doCloseDestroyConfirmModal = () => {
-    setRecordIdToDestroy(null);
-  };
-
-  const doChangeSort = (field) => {
-    const order =
-      sorter.field === field && sorter.order === 'ascend'
-        ? 'descend'
-        : 'ascend';
-
-    dispatch(
-      actions.doChangeSort({
-        field,
-        order,
-      }),
-    );
-  };
+    setRecordIdToDestroy(null)
+  }
 
   const doChangePagination = (pagination) => {
-    dispatch(actions.doChangePagination(pagination));
-  };
+    dispatch(actions.doChangePagination(pagination))
+  }
 
   const doDestroy = (id) => {
-    doCloseDestroyConfirmModal();
+    doCloseDestroyConfirmModal()
 
-    dispatch(destroyActions.doDestroy(id));
-  };
+    dispatch(destroyActions.doDestroy(id))
+  }
 
   const doToggleAllSelected = () => {
-    dispatch(actions.doToggleAllSelected());
-  };
+    dispatch(actions.doToggleAllSelected())
+  }
 
   const doToggleOneSelected = (id) => {
-    dispatch(actions.doToggleOneSelected(id));
-  };
+    dispatch(actions.doToggleOneSelected(id))
+  }
 
   return (
     <>
@@ -109,11 +90,11 @@ function ResourceBreakdownStructureListTable(props) {
                   />
                 )}
               </TableColumnHeader>
-                <TableColumnHeader
-                  label={i18n(
-                    'entities.resourceBreakdownStructure.fields.name',
-                  )}
-                />
+              <TableColumnHeader
+                label={i18n(
+                  'entities.resourceBreakdownStructure.fields.name',
+                )}
+              />
               <TableColumnHeader />
             </tr>
           </thead>
@@ -153,9 +134,7 @@ function ResourceBreakdownStructureListTable(props) {
                     />
                   </th>
                   <td className="whitespace-nowrap px-5 py-5 border-b border-gray-200 dark:border-gray-800 text-sm">
-                    <FilesListView
-                      value={row.name}
-                    />
+                    <FilesListView value={row.name} />
                   </td>
                   <td
                     className="w-56 whitespace-nowrap border-b px-5 py-5 border-gray-200 dark:border-gray-800"
@@ -214,7 +193,7 @@ function ResourceBreakdownStructureListTable(props) {
         />
       )}
     </>
-  );
+  )
 }
 
-export default ResourceBreakdownStructureListTable;
+export default ResourceBreakdownStructureListTable

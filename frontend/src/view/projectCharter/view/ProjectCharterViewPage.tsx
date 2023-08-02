@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
-import { i18n } from 'src/i18n';
-import actions from 'src/modules/projectCharter/view/projectCharterViewActions';
-import selectors from 'src/modules/projectCharter/view/projectCharterViewSelectors';
-import ProjectCharterView from 'src/view/projectCharter/view/ProjectCharterView';
-import ProjectCharterViewToolbar from 'src/view/projectCharter/view/ProjectCharterViewToolbar';
-import Breadcrumb from 'src/view/shared/Breadcrumb';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouteMatch } from 'react-router-dom'
+import { i18n } from 'src/i18n'
+import actions from 'src/modules/projectCharter/view/projectCharterViewActions'
+import selectors from 'src/modules/projectCharter/view/projectCharterViewSelectors'
+import ProjectCharterView from 'src/view/projectCharter/view/ProjectCharterView'
+import ProjectCharterViewToolbar from 'src/view/projectCharter/view/ProjectCharterViewToolbar'
+import Breadcrumb from 'src/view/shared/Breadcrumb'
 
 function ProjectCharterPage() {
-  const dispatch = useDispatch();
-  const match = useRouteMatch();
+  const dispatch = useDispatch()
+  const match = useRouteMatch()
 
-  const loading = useSelector(selectors.selectLoading);
-  const record = useSelector(selectors.selectRecord);
+  const loading = useSelector(selectors.selectLoading)
+  const record = useSelector(selectors.selectRecord)
 
   useEffect(() => {
-    dispatch(actions.doFind(match.params.id));
-  }, [dispatch, match.params.id]);
+    dispatch(actions.doFind(match.params.id))
+  }, [dispatch, match.params.id])
 
   return (
     <>
@@ -39,7 +39,7 @@ function ProjectCharterPage() {
         <ProjectCharterView loading={loading} record={record} />
       </div>
     </>
-  );
+  )
 }
 
-export default ProjectCharterPage;
+export default ProjectCharterPage

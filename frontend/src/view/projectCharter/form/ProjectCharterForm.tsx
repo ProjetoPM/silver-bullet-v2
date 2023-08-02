@@ -1,313 +1,352 @@
-import { faSave } from '@fortawesome/free-regular-svg-icons';
-import {
-  faTimes,
-  faUndo,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { i18n } from 'src/i18n';
-import yupFormSchemas from 'src/modules/shared/yup/yupFormSchemas';
-import InputFormItem from 'src/view/shared/form/items/InputFormItem';
-import moment from 'moment';
-import DatePickerFormItem from 'src/view/shared/form/items/DatePickerFormItem';
-import * as yup from 'yup';
+import { faSave } from '@fortawesome/free-regular-svg-icons'
+import { faTimes, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { RichTextEditor } from 'src/components/RichEditor'
+import { i18n } from 'src/i18n'
+import DatePickerFormItem from 'src/view/shared/form/items/DatePickerFormItem'
+import { z } from 'zod'
+import { useState } from 'react'
+import TextAreaFormItem from 'src/view/shared/form/items/TextAreaFormItem'
 
-const schema = yup.object().shape({
-  projectName: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.projectName'),
-    {},
-  ),
-  highLevelProjectDescription: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.highLevelProjectDescription'),
-    {
-      "required": true,
-      "min": 5,
-      "max": 2000
-    },
-  ),
-  startdate: yupFormSchemas.date(
-    i18n('entities.projectCharter.fields.startdate'),
-    {},
-  ),
-  enddate: yupFormSchemas.date(
-    i18n('entities.projectCharter.fields.enddate'),
-    {},
-  ),
-  projectPurpose: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.projectPurpose'),
-    {},
-  ),
-  measurableProjectObjectives: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.measurableProjectObjectives'),
-    {
-      "min": 5,
-      "max": 2000
-    },
-  ),
-  keyBenefits: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.keyBenefits'),
-    {},
-  ),
-  highlevelRequirements: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.highlevelRequirements'),
-    {
-      "max": 2000
-    },
-  ),
-  boundaries: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.boundaries'),
-    {
-      "max": 2000
-    },
-  ),
-  overallProjectRisk: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.overallProjectRisk'),
-    {
-      "max": 2000
-    },
-  ),
-  summaryMilestoneSchedule: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.summaryMilestoneSchedule'),
-    {
-      "max": 2000
-    },
-  ),
-  preapprovedFinancialResources: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.preapprovedFinancialResources'),
-    {
-      "max": 2000
-    },
-  ),
-  projectApprovalRequirements: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.projectApprovalRequirements'),
-    {
-      "max": 2000
-    },
-  ),
-  successCriteria: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.successCriteria'),
-    {
-      "max": 2000
-    },
-  ),
-  projectExitCriteria: yupFormSchemas.string(
-    i18n('entities.projectCharter.fields.projectExitCriteria'),
-    {
-      "max": 2000
-    },
-  ),
-});
+const schema = z.object({
+  projectName: z
+    .string()
+    .refine(value => value.replace('<p><br></p>', '').length > 0),
+  highLevelProjectDescription: z.string(),
+  startdate: z.union([z.date(), z.null()]).optional().default(null),
+  enddate: z.date().optional().default(new Date()),
+  projectPurpose: z.string().optional(),
+  measurableProjectObjectives: z.string().optional(),
+  keyBenefits: z.string().optional(),
+  highlevelRequirements: z.string().optional(),
+  boundaries: z.string().optional(),
+  overallProjectRisk: z.string().optional(),
+  summaryMilestoneSchedule: z.string().optional(),
+  preapprovedFinancialResources: z.string().optional(),
+  projectApprovalRequirements: z.string().optional(),
+  successCriteria: z.string().optional(),
+  projectExitCriteria: z.string().optional(),
+})
+
+type FormSchema = z.infer<typeof schema>
 
 function ProjectCharterForm(props) {
-  const { saveLoading } = props;
+  const { saveLoading, title } = props
+  const [isRichText, setRichText] = useState(false)
 
-  const [initialValues] = useState(() => {
-    const record = props.record || {};
+  const initialValues = {
+    projectName: props.record.projectName,
+    highLevelProjectDescription: props.record.highLevelProjectDescription,
+    startdate: new Date(props.record.startdate || new Date()),
+    enddate: new Date(props.record.enddate || new Date()),
+    projectPurpose: props.record.projectPurpose || '',
+    measurableProjectObjectives: props.record.measurableProjectObjectives || '',
+    keyBenefits: props.record.keyBenefits || '',
+    highlevelRequirements: props.record.highlevelRequirements || '',
+    boundaries: props.record.boundaries || '',
+    overallProjectRisk: props.record.overallProjectRisk || '',
+    summaryMilestoneSchedule: props.record.summaryMilestoneSchedule || '',
+    preapprovedFinancialResources:
+      props.record.preapprovedFinancialResources || '',
+    projectApprovalRequirements: props.record.projectApprovalRequirements || '',
+    successCriteria: props.record.successCriteria || '',
+    projectExitCriteria: props.record.projectExitCriteria || '',
+  }
 
-    return {
-      projectName: record.projectName,
-      highLevelProjectDescription: record.highLevelProjectDescription,
-      startdate: record.startdate ? moment(record.startdate, 'YYYY-MM-DD').toDate() : null,
-      enddate: record.enddate ? moment(record.enddate, 'YYYY-MM-DD').toDate() : null,
-      projectPurpose: record.projectPurpose,
-      measurableProjectObjectives: record.measurableProjectObjectives,
-      keyBenefits: record.keyBenefits,
-      highlevelRequirements: record.highlevelRequirements,
-      boundaries: record.boundaries,
-      overallProjectRisk: record.overallProjectRisk,
-      summaryMilestoneSchedule: record.summaryMilestoneSchedule,
-      preapprovedFinancialResources: record.preapprovedFinancialResources,
-      projectApprovalRequirements: record.projectApprovalRequirements,
-      successCriteria: record.successCriteria,
-      projectExitCriteria: record.projectExitCriteria,
-    };
-  });
-
-  const form = useForm({
-    resolver: yupResolver(schema),
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(schema),
+    shouldFocusError: true,
     mode: 'all',
     defaultValues: initialValues,
-  });
+  })
 
-  const onSubmit = (values) => {
-    props.onSubmit(props.record?.id, values);
-  };
+  const onSubmit = values => {
+    props.onSubmit(props.record?.id, values)
+  }
 
   const onReset = () => {
-    Object.keys(initialValues).forEach((key) => {
-      form.setValue(key, initialValues[key]);
-    });
-  };
+    // TODO
+    // Object.keys(initialValues).forEach(key => {
+    //   form.setValue(key, initialValues[key])
+    // })
+  }
 
   return (
-    <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="w-full sm:w-md md:w-md lg:w-md">
-          <InputFormItem
-            name="projectName"
-            label={i18n('entities.projectCharter.fields.projectName')}
-            required={false}
-          autoFocus
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="highLevelProjectDescription"
-            label={i18n('entities.projectCharter.fields.highLevelProjectDescription')}
-          hint={i18n('entities.projectCharter.hints.highLevelProjectDescription')}
-            required={true}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <DatePickerFormItem
-            name="startdate"
-            label={i18n('entities.projectCharter.fields.startdate')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <DatePickerFormItem
-            name="enddate"
-            label={i18n('entities.projectCharter.fields.enddate')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="projectPurpose"
-            label={i18n('entities.projectCharter.fields.projectPurpose')}
-          hint={i18n('entities.projectCharter.hints.projectPurpose')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="measurableProjectObjectives"
-            label={i18n('entities.projectCharter.fields.measurableProjectObjectives')}
-          hint={i18n('entities.projectCharter.hints.measurableProjectObjectives')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="keyBenefits"
-            label={i18n('entities.projectCharter.fields.keyBenefits')}
-          hint={i18n('entities.projectCharter.hints.keyBenefits')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="highlevelRequirements"
-            label={i18n('entities.projectCharter.fields.highlevelRequirements')}
-          hint={i18n('entities.projectCharter.hints.highlevelRequirements')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="boundaries"
-            label={i18n('entities.projectCharter.fields.boundaries')}
-          hint={i18n('entities.projectCharter.hints.boundaries')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="overallProjectRisk"
-            label={i18n('entities.projectCharter.fields.overallProjectRisk')}
-          hint={i18n('entities.projectCharter.hints.overallProjectRisk')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="summaryMilestoneSchedule"
-            label={i18n('entities.projectCharter.fields.summaryMilestoneSchedule')}
-          hint={i18n('entities.projectCharter.hints.summaryMilestoneSchedule')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="preapprovedFinancialResources"
-            label={i18n('entities.projectCharter.fields.preapprovedFinancialResources')}
-          hint={i18n('entities.projectCharter.hints.preapprovedFinancialResources')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="projectApprovalRequirements"
-            label={i18n('entities.projectCharter.fields.projectApprovalRequirements')}
-          hint={i18n('entities.projectCharter.hints.projectApprovalRequirements')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="successCriteria"
-            label={i18n('entities.projectCharter.fields.successCriteria')}
-          hint={i18n('entities.projectCharter.hints.successCriteria')}
-            required={false}
-          />
-        </div>
-        <div className="w-full sm:w-md md:w-md lg:w-md mt-4">
-          <InputFormItem
-            name="projectExitCriteria"
-            label={i18n('entities.projectCharter.fields.projectExitCriteria')}
-          hint={i18n('entities.projectCharter.hints.projectExitCriteria')}
-            required={false}
-          />
-        </div>
-
-        <div className="pt-4">
+    <>
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-lg font-medium">{title}</h1>
+        <div className="text-sm">
           <button
-            className="mr-2 mb-2 text-sm disabled:opacity-50 disabled:cursor-default px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-            disabled={saveLoading}
-            type="button"
-            onClick={form.handleSubmit(onSubmit)}
+            className="bg-gray-600 py1.5 px-2 rounded text-white"
+            onClick={() => setRichText(prev => !prev)}
           >
-            <FontAwesomeIcon
-              className="mr-2"
-              icon={faSave}
-            />
-            {i18n('common.save')}
+            Habilitar Editor de Texto
           </button>
+        </div>
+      </div>
 
-          <button
-            disabled={saveLoading}
-            onClick={onReset}
-            className="mr-2 mb-2 text-sm disabled:opacity-50 disabled:cursor-default px-4 py-2 tracking-wide dark:border-gray-800 dark:bg-gray-800 dark:hover:bg-gray-600 dark:text-white text-gray-700 border border-gray-300 transition-colors duration-200 transform bg-white rounded-md hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-            type="button"
-          >
-            <FontAwesomeIcon
-              className="mr-2"
-              icon={faUndo}
+      <FormProvider {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="w-full">
+            {isRichText ? (
+              <Controller
+                name="projectName"
+                control={form.control}
+                defaultValue={form.getValues('projectName')}
+                render={field => (
+                  <RichTextEditor
+                    {...field}
+                    label={i18n('entities.projectCharter.fields.projectName')}
+                    onChange={text => {
+                      field.onChange(text)
+                      console.log(form.watch('projectName'))
+                    }}
+                    error={form.errors.projectName?.message}
+                  />
+                )}
+              />
+            ) : (
+              <textarea defaultValue={form.getValues('projectName')}></textarea>
+            )}
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="highLevelProjectDescription"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.highLevelProjectDescription',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.highLevelProjectDescription?.message}
+                />
+              )}
             />
-            {i18n('common.reset')}
-          </button>
+          </div>
+          <div className="w-full mt-3">
+            <DatePickerFormItem
+              name="startdate"
+              label={i18n('entities.projectCharter.fields.startdate')}
+              required={false}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <DatePickerFormItem
+              name="enddate"
+              label={i18n('entities.projectCharter.fields.enddate')}
+              required={false}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="projectPurpose"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n('entities.projectCharter.fields.projectPurpose')}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.projectPurpose?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="measurableProjectObjectives"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.measurableProjectObjectives',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.measurableProjectObjectives?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="keyBenefits"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n('entities.projectCharter.fields.keyBenefits')}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.keyBenefits?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="highlevelRequirements"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.highlevelRequirements',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.highlevelRequirements?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="boundaries"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n('entities.projectCharter.fields.boundaries')}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.boundaries?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="overallProjectRisk"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.overallProjectRisk',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.overallProjectRisk?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="summaryMilestoneSchedule"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.summaryMilestoneSchedule',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.summaryMilestoneSchedule?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="preapprovedFinancialResources"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.preapprovedFinancialResources',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.preapprovedFinancialResources?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="projectApprovalRequirements"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.projectApprovalRequirements',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.projectApprovalRequirements?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="successCriteria"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n('entities.projectCharter.fields.successCriteria')}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.projectApprovalRequirements?.message}
+                />
+              )}
+            />
+          </div>
+          <div className="w-full mt-3">
+            <Controller
+              name="projectExitCriteria"
+              control={form.control}
+              render={field => (
+                <RichTextEditor
+                  {...field}
+                  label={i18n(
+                    'entities.projectCharter.fields.projectExitCriteria',
+                  )}
+                  onChange={text => field.onChange(text)}
+                  error={form.errors.projectExitCriteria?.message}
+                />
+              )}
+            />
+          </div>
 
-          {props.onCancel ? (
+          <div className="pt-4">
+            <button
+              className="mr-2 mb-2 text-sm disabled:opacity-50 disabled:cursor-default px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              disabled={saveLoading}
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              <FontAwesomeIcon className="mr-2" icon={faSave} />
+              {i18n('common.save')}
+            </button>
+
             <button
               disabled={saveLoading}
-              onClick={() => props.onCancel()}
+              onClick={onReset}
               className="mr-2 mb-2 text-sm disabled:opacity-50 disabled:cursor-default px-4 py-2 tracking-wide dark:border-gray-800 dark:bg-gray-800 dark:hover:bg-gray-600 dark:text-white text-gray-700 border border-gray-300 transition-colors duration-200 transform bg-white rounded-md hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
               type="button"
             >
-              <FontAwesomeIcon
-                className="mr-2"
-                icon={faTimes}
-              />
-              {i18n('common.cancel')}
+              <FontAwesomeIcon className="mr-2" icon={faUndo} />
+              {i18n('common.reset')}
             </button>
-          ) : null}
-        </div>
-      </form>
-    </FormProvider>
-  );
+
+            {props.onCancel ? (
+              <button
+                disabled={saveLoading}
+                onClick={() => props.onCancel()}
+                className="mr-2 mb-2 text-sm disabled:opacity-50 disabled:cursor-default px-4 py-2 tracking-wide dark:border-gray-800 dark:bg-gray-800 dark:hover:bg-gray-600 dark:text-white text-gray-700 border border-gray-300 transition-colors duration-200 transform bg-white rounded-md hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                type="button"
+              >
+                <FontAwesomeIcon className="mr-2" icon={faTimes} />
+                {i18n('common.cancel')}
+              </button>
+            ) : null}
+          </div>
+        </form>
+      </FormProvider>
+    </>
+  )
 }
 
-export default ProjectCharterForm;
+export default ProjectCharterForm

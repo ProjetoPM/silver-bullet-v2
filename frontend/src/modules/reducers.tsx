@@ -29,21 +29,6 @@ import costEstimates from 'src/modules/costEstimates/costEstimatesReducers';
 import qualityManagementPlan from 'src/modules/qualityManagementPlan/qualityManagementPlanReducers';
 import resourceManagementPlan from 'src/modules/resourceManagementPlan/resourceManagementPlanReducers';
 import resourceBreakdownStructure from 'src/modules/resourceBreakdownStructure/resourceBreakdownStructureReducers';
-import communicationsManagementPlan from 'src/modules/communicationsManagementPlan/communicationsManagementPlanReducers';
-import riskManagementPlan from 'src/modules/riskManagementPlan/riskManagementPlanReducers';
-import riskRegistration from 'src/modules/riskRegistration/riskRegistrationReducers';
-import procurementManagementPlan from 'src/modules/procurementManagementPlan/procurementManagementPlanReducers';
-import procurementStatementWorkRegister from 'src/modules/procurementStatementWorkRegister/procurementStatementWorkRegisterReducers';
-import projectPerformanceMonitoringReport from 'src/modules/projectPerformanceMonitoringReport/projectPerformanceMonitoringReportReducers';
-import workPerformanceReports from 'src/modules/workPerformanceReports/workPerformanceReportsReducers';
-import issueLog from 'src/modules/issueLog/issueLogReducers';
-import lessonLearnedRegister from 'src/modules/lessonLearnedRegister/lessonLearnedRegisterReducers';
-import qualityChecklist from 'src/modules/qualityChecklist/qualityChecklistReducers';
-import teamPerformanceEvaluation from 'src/modules/teamPerformanceEvaluation/teamPerformanceEvaluationReducers';
-import changeRequest from 'src/modules/changeRequest/changeRequestReducers';
-import projectClosure from 'src/modules/projectClosure/projectClosureReducers';
-import closedProcurementDocumentation from 'src/modules/closedProcurementDocumentation/closedProcurementDocumentationReducers';
-import finalReport from 'src/modules/finalReport/finalReportReducers';
 import { combineReducers } from 'redux';
 
 export default (history) =>
@@ -79,19 +64,4 @@ export default (history) =>
     qualityManagementPlan,
     resourceManagementPlan,
     resourceBreakdownStructure,
-    communicationsManagementPlan,
-    riskManagementPlan,
-    riskRegistration,
-    procurementManagementPlan,
-    procurementStatementWorkRegister,
-    projectPerformanceMonitoringReport,
-    workPerformanceReports,
-    issueLog,
-    lessonLearnedRegister,
-    qualityChecklist,
-    teamPerformanceEvaluation,
-    changeRequest,
-    projectClosure,
-    closedProcurementDocumentation,
-    finalReport,
   });

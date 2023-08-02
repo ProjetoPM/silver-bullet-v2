@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useFormContext } from 'react-hook-form';
-import FormErrors from 'src/view/shared/form/formErrors';
-import { v4 as uuid } from 'uuid';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import { useFormContext } from 'react-hook-form'
+import FormErrors from 'src/view/shared/form/formErrors'
+import { v4 as uuid } from 'uuid'
 
 function TextAreaFormItem(props) {
-  const [inputId] = useState(uuid());
+  const [inputId] = useState(uuid())
 
   const {
     label,
@@ -16,13 +16,14 @@ function TextAreaFormItem(props) {
     autoComplete,
     externalErrorMessage,
     required,
-  } = props;
+    value
+  } = props
 
   const {
     register,
     errors,
     formState: { touched, isSubmitted },
-  } = useFormContext();
+  } = useFormContext()
 
   const errorMessage = FormErrors.errorMessage(
     name,
@@ -30,7 +31,7 @@ function TextAreaFormItem(props) {
     touched,
     isSubmitted,
     externalErrorMessage,
-  );
+  )
 
   return (
     <div className="form-group">
@@ -40,9 +41,7 @@ function TextAreaFormItem(props) {
           htmlFor={inputId}
         >
           {label}{' '}
-          {required ? (
-            <span className="text-sm text-red-400">*</span>
-          ) : null}
+          {required ? <span className="text-sm text-red-400">*</span> : null}
         </label>
       )}
 
@@ -51,38 +50,32 @@ function TextAreaFormItem(props) {
           id={inputId}
           name={name}
           ref={register}
-          onChange={(event) => {
-            props.onChange &&
-              props.onChange(event.target.value);
+          onChange={event => {
+            props.onChange && props.onChange(event.target.value)
           }}
-          onBlur={(event) => {
-            props.onBlur && props.onBlur(event);
+          onBlur={event => {
+            props.onBlur && props.onBlur(event)
           }}
           placeholder={placeholder || undefined}
           autoFocus={autoFocus || undefined}
           autoComplete={autoComplete || undefined}
-          className={`block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring ${
-            errorMessage
-              ? 'border-red-400 text-red-600'
-              : ''
+          className={`block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring-1 ${
+            errorMessage ? 'border-red-400 text-red-600' : ''
           }`}
+          value={value}
         />
       </div>
-      <div className="text-red-600 text-sm mt-2">
-        {errorMessage}
-      </div>
+      <div className="text-red-600 text-sm mt-2">{errorMessage}</div>
       {Boolean(hint) && (
-        <div className="text-gray-500 text-sm mt-2">
-          {hint}
-        </div>
+        <div className="text-gray-500 text-sm mt-2">{hint}</div>
       )}
     </div>
-  );
+  )
 }
 
 TextAreaFormItem.defaultProps = {
   required: false,
-};
+}
 
 TextAreaFormItem.propTypes = {
   name: PropTypes.string.isRequired,
@@ -93,6 +86,6 @@ TextAreaFormItem.propTypes = {
   prefix: PropTypes.string,
   placeholder: PropTypes.string,
   externalErrorMessage: PropTypes.string,
-};
+}
 
-export default TextAreaFormItem;
+export default TextAreaFormItem

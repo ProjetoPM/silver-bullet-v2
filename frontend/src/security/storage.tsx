@@ -10,89 +10,16 @@
 export default class Storage {
   static get values() {
     return {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       workbreakdownStructureArquivo: {
         id: 'workbreakdownStructureArquivo',
         folder: 'tenant/:tenantId/workbreakdownStructure/arquivo',
         maxSizeInBytes: 100 * 1024 * 1024,
       },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       resourceBreakdownStructureName: {
         id: 'resourceBreakdownStructureName',
         folder: 'tenant/:tenantId/resourceBreakdownStructure/name',
         maxSizeInBytes: 100 * 1024 * 1024,
       },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       settingsLogos: {
         id: 'settingsLogos',
         folder: 'tenant/:tenantId/settings/logos',
@@ -101,8 +28,7 @@ export default class Storage {
       },
       settingsBackgroundImages: {
         id: 'settingsBackgroundImages',
-        folder:
-          'tenant/:tenantId/settings/backgroundImages',
+        folder: 'tenant/:tenantId/settings/backgroundImages',
         maxSizeInBytes: 10 * 1024 * 1024,
         publicRead: true,
       },
@@ -113,6 +39,6 @@ export default class Storage {
         bypassWritingPermissions: true,
         publicRead: true,
       },
-    };
+    }
   }
 }

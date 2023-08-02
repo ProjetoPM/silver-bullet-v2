@@ -1,29 +1,26 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import selectors from 'src/modules/projectCharter/projectCharterSelectors';
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import selectors from 'src/modules/projectCharter/projectCharterSelectors'
 
 function ProjectCharterViewItem(props) {
-  const hasPermissionToRead = useSelector(
-    selectors.selectPermissionToRead,
-  );
+  const hasPermissionToRead = useSelector(selectors.selectPermissionToRead)
 
   const valueAsArray = () => {
-    const { value } = props;
+    const { value } = props
 
     if (!value) {
-      return [];
+      return []
     }
 
     if (Array.isArray(value)) {
-      return value;
+      return value
     }
 
-    return [value];
-  };
+    return [value]
+  }
 
-  const displayableRecord = (record) => {
+  const displayableRecord = record => {
     if (hasPermissionToRead) {
       return (
         <div key={record.id}>
@@ -34,14 +31,14 @@ function ProjectCharterViewItem(props) {
             {record.projectName}
           </Link>
         </div>
-      );
+      )
     }
 
-    return <div key={record.id}>{record.projectName}</div>;
-  };
+    return <div key={record.id}>{record.projectName}</div>
+  }
 
   if (!valueAsArray().length) {
-    return null;
+    return null
   }
 
   return (
@@ -49,16 +46,14 @@ function ProjectCharterViewItem(props) {
       <label className="text-medium text-gray-600 dark:text-gray-400">
         {props.label}
       </label>
-      {valueAsArray().map((value) =>
-        displayableRecord(value),
-      )}
+      {valueAsArray().map(value => displayableRecord(value))}
     </div>
-  );
+  )
 }
 
 ProjectCharterViewItem.propTypes = {
   label: PropTypes.string,
   value: PropTypes.any,
-};
+}
 
-export default ProjectCharterViewItem;
+export default ProjectCharterViewItem

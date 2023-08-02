@@ -1,10 +1,7 @@
-import {
-  faSortDown,
-  faSortUp,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import styled from 'styled-components';
+import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react'
+import styled from 'styled-components'
 
 const TableColumnHeaderStyled = styled.th`
   cursor: pointer;
@@ -21,9 +18,9 @@ const TableColumnHeaderStyled = styled.th`
     opacity: 0.8;
     transition: opacity 0.15s ease-out;
   }
-`;
+`
 
-const TableColumnHeader = (props) => {
+const TableColumnHeader = props => {
   const {
     sorter,
     onSort,
@@ -32,7 +29,7 @@ const TableColumnHeader = (props) => {
     hasRows,
     children,
     align = 'left',
-  } = props;
+  } = props
 
   if (!hasRows || !onSort) {
     return (
@@ -45,7 +42,7 @@ const TableColumnHeader = (props) => {
       >
         {children || label || ''}
       </th>
-    );
+    )
   }
 
   return (
@@ -70,23 +67,15 @@ const TableColumnHeader = (props) => {
       >
         {children || label || ''}
 
-        {sorter.field === name &&
-          sorter.order === 'descend' && (
-            <FontAwesomeIcon
-              className="ml-2"
-              icon={faSortUp}
-            />
-          )}
-        {sorter.field === name &&
-          sorter.order === 'ascend' && (
-            <FontAwesomeIcon
-              className="ml-2"
-              icon={faSortDown}
-            />
-          )}
+        {sorter.field === name && sorter.order === 'descend' && (
+          <FontAwesomeIcon className="ml-2" icon={faSortUp} />
+        )}
+        {sorter.field === name && sorter.order === 'ascend' && (
+          <FontAwesomeIcon className="ml-2" icon={faSortDown} />
+        )}
       </div>
     </TableColumnHeaderStyled>
-  );
-};
+  )
+}
 
-export default TableColumnHeader;
+export default TableColumnHeader

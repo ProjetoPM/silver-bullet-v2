@@ -14,6 +14,17 @@ module.exports = {
           ...defaultTheme.fontFamily.sans,
         ],
       },
+      maxHeight: {
+        '102': '25.5rem',
+        '108': '27rem',
+        '120': '30rem',
+        '130': '32.5rem',
+        '140': '35rem',
+        '150': '37.5rem',
+        '160': '40rem',
+        '170': '42.5rem',
+        '180': '45rem',
+      },
     },
   },
   variants: {

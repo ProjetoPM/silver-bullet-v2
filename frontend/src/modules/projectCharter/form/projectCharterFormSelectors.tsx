@@ -1,27 +1,22 @@
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-const selectRaw = (state) => state.projectCharter.form;
+const selectRaw = state => state.projectCharter.form
 
-const selectRecord = createSelector(
-  [selectRaw],
-  (raw) => raw.record,
-);
+const selectRecord = createSelector([selectRaw], raw => raw.record)
 
-const selectInitLoading = createSelector(
-  [selectRaw],
-  (raw) => Boolean(raw.initLoading),
-);
+const selectInitLoading = createSelector([selectRaw], raw =>
+  Boolean(raw.initLoading),
+)
 
-const selectSaveLoading = createSelector(
-  [selectRaw],
-  (raw) => Boolean(raw.saveLoading),
-);
+const selectSaveLoading = createSelector([selectRaw], raw =>
+  Boolean(raw.saveLoading),
+)
 
 const projectCharterFormSelectors = {
   selectInitLoading,
   selectSaveLoading,
   selectRecord,
   selectRaw,
-};
+}
 
-export default projectCharterFormSelectors;
+export default projectCharterFormSelectors

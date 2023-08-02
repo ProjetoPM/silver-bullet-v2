@@ -1,10 +1,9 @@
-import React from 'react';
-import { i18n } from 'src/i18n';
-import actions from 'src/modules/projectCharter/importer/projectCharterImporterActions';
-import fields from 'src/modules/projectCharter/importer/projectCharterImporterFields';
-import selectors from 'src/modules/projectCharter/importer/projectCharterImporterSelectors';
-import Breadcrumb from 'src/view/shared/Breadcrumb';
-import importerHoc from 'src/view/shared/importer/Importer';
+import { i18n } from 'src/i18n'
+import actions from 'src/modules/projectCharter/importer/projectCharterImporterActions'
+import fields from 'src/modules/projectCharter/importer/projectCharterImporterFields'
+import selectors from 'src/modules/projectCharter/importer/projectCharterImporterSelectors'
+import Breadcrumb from 'src/view/shared/Breadcrumb'
+import importerHoc from 'src/view/shared/importer/Importer'
 
 function ProjectCharterImportPage() {
   const Importer = importerHoc(
@@ -12,7 +11,7 @@ function ProjectCharterImportPage() {
     actions,
     fields,
     i18n('entities.projectCharter.importer.hint'),
-  );
+  )
 
   return (
     <>
@@ -32,7 +31,7 @@ function ProjectCharterImportPage() {
         <Importer />
       </div>
     </>
-  );
+  )
 }
 
-export default ProjectCharterImportPage;
+export default ProjectCharterImportPage
