@@ -21,8 +21,20 @@ export default class ProjectService {
     const session = await MongooseRepository.createSession(
       this.options.database,
     );
-
+    
     try{
+      const projects = await ProjectRepository.findAndCountAll({filter: {}}, this.options);
+    
+      const projectWithSameNameExists = projects.rows.filter(project => {
+        if(project.name == data.name){
+          return project;
+        }
+      });
+
+      if(projectWithSameNameExists.length > 0){
+        throw new Error400();
+      }
+
       let record = await ProjectRepository.create(data, {
         ...this.options,
         session,
