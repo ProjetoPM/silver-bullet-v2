@@ -1,0 +1,4 @@
+{
+  "at_least": "String deve conter pelo menos {{value}} caracter(es)",
+  "at_most": "String deve conter no máximo {{value}} caracter(es)"
+}
