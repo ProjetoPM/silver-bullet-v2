@@ -23,16 +23,18 @@ export default class ProjectService {
     );
     
     try{
-      const projects = await ProjectRepository.findAndCountAll({filter: {}}, this.options);
-    
-      const projectWithSameNameExists = projects.rows.filter(project => {
-        if(project.name == data.name){
-          return project;
+      if(data.name){
+        const projects = await ProjectRepository.findAndCountAll({filter: {}}, this.options);
+        
+        const projectWithSameNameExists = projects.rows.filter(project => {
+          if(project.name == data.name){
+            return project;
+          }
+        });
+        
+        if(projectWithSameNameExists.length > 0){
+          throw new Error400();
         }
-      });
-
-      if(projectWithSameNameExists.length > 0){
-        throw new Error400();
       }
 
       let record = await ProjectRepository.create(data, {
